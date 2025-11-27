@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#2c003e">
-    <meta name="description" content="Casino風格的推銀仔遊戲，結合老虎機元素">
+    <meta name="description" content="Casino風格的3D推銀仔遊戲">
     <title>🎰 推銀仔遊戲 | Coin Pusher Casino</title>
     
     <!-- PWA Meta Tags -->
@@ -14,46 +14,52 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 </head>
 <body>
     <div id="game-container">
         <!-- Slot Machine Section -->
         <div id="slot-machine">
+            <div class="slot-header">
+                <div class="bonus-display">🎰 BONUS 🎰</div>
+            </div>
             <div class="slot-display">
-                <div class="reel" id="reel1">
-                    <div class="symbol">🍒</div>
-                    <div class="symbol">🍋</div>
-                    <div class="symbol">🍊</div>
-                    <div class="symbol">🍉</div>
-                    <div class="symbol">⭐</div>
-                    <div class="symbol">💎</div>
-                    <div class="symbol">7️⃣</div>
-                </div>
-                <div class="reel" id="reel2">
-                    <div class="symbol">🍒</div>
-                    <div class="symbol">🍋</div>
-                    <div class="symbol">🍊</div>
-                    <div class="symbol">🍉</div>
-                    <div class="symbol">⭐</div>
-                    <div class="symbol">💎</div>
-                    <div class="symbol">7️⃣</div>
-                </div>
-                <div class="reel" id="reel3">
-                    <div class="symbol">🍒</div>
-                    <div class="symbol">🍋</div>
-                    <div class="symbol">🍊</div>
-                    <div class="symbol">🍉</div>
-                    <div class="symbol">⭐</div>
-                    <div class="symbol">💎</div>
-                    <div class="symbol">7️⃣</div>
+                <div class="reel-container">
+                    <div class="reel" id="reel1">
+                        <div class="symbol">🍒</div>
+                        <div class="symbol">🍋</div>
+                        <div class="symbol">🍊</div>
+                        <div class="symbol">🍉</div>
+                        <div class="symbol">⭐</div>
+                        <div class="symbol">💎</div>
+                        <div class="symbol">7️⃣</div>
+                    </div>
+                    <div class="reel" id="reel2">
+                        <div class="symbol">🍒</div>
+                        <div class="symbol">🍋</div>
+                        <div class="symbol">🍊</div>
+                        <div class="symbol">🍉</div>
+                        <div class="symbol">⭐</div>
+                        <div class="symbol">💎</div>
+                        <div class="symbol">7️⃣</div>
+                    </div>
+                    <div class="reel" id="reel3">
+                        <div class="symbol">🍒</div>
+                        <div class="symbol">🍋</div>
+                        <div class="symbol">🍊</div>
+                        <div class="symbol">🍉</div>
+                        <div class="symbol">⭐</div>
+                        <div class="symbol">💎</div>
+                        <div class="symbol">7️⃣</div>
+                    </div>
                 </div>
             </div>
-            <div class="slot-result" id="slotResult"></div>
+            <div class="slot-result" id="slotResult">TOTAL WINNINGS</div>
         </div>
 
-        <!-- Coin Pusher Canvas -->
-        <canvas id="gameCanvas"></canvas>
+        <!-- 3D Canvas -->
+        <div id="canvas-container">
+            <canvas id="gameCanvas"></canvas>
+        </div>
         
         <!-- Control Panel -->
         <div id="control-panel">
@@ -68,8 +74,10 @@
                 </div>
             </div>
             <button id="coinButton" class="coin-button">
-                <span class="button-text">投幣</span>
-                <span class="button-icon">🪙</span>
+                <div class="button-inner">
+                    <span class="button-icon">🪙</span>
+                    <span class="button-text">投幣</span>
+                </div>
             </button>
         </div>
     </div>
@@ -82,18 +90,22 @@
         </div>
     </div>
 
-    <!-- Audio -->
-    <audio id="bgMusic" loop>
-        <source src="audio/bgm.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="coinSound">
-        <source src="audio/coin.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="winSound">
-        <source src="audio/win.mp3" type="audio/mpeg">
-    </audio>
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div class="loader"></div>
+        <p>載入中...</p>
+    </div>
 
-    <script src="game.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js"></script>
+    <script type="module" src="game.js"></script>
     <script src="sw-register.js"></script>
 </body>
 </html>
