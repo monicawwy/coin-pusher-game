@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2c003e">
+    <meta name="description" content="Casino風格的推銀仔遊戲，結合老虎機元素">
+    <title>🎰 推銀仔遊戲 | Coin Pusher Casino</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+</head>
+<body>
+    <div id="game-container">
+        <!-- Slot Machine Section -->
+        <div id="slot-machine">
+            <div class="slot-display">
+                <div class="reel" id="reel1">
+                    <div class="symbol">🍒</div>
+                    <div class="symbol">🍋</div>
+                    <div class="symbol">🍊</div>
+                    <div class="symbol">🍉</div>
+                    <div class="symbol">⭐</div>
+                    <div class="symbol">💎</div>
+                    <div class="symbol">7️⃣</div>
+                </div>
+                <div class="reel" id="reel2">
+                    <div class="symbol">🍒</div>
+                    <div class="symbol">🍋</div>
+                    <div class="symbol">🍊</div>
+                    <div class="symbol">🍉</div>
+                    <div class="symbol">⭐</div>
+                    <div class="symbol">💎</div>
+                    <div class="symbol">7️⃣</div>
+                </div>
+                <div class="reel" id="reel3">
+                    <div class="symbol">🍒</div>
+                    <div class="symbol">🍋</div>
+                    <div class="symbol">🍊</div>
+                    <div class="symbol">🍉</div>
+                    <div class="symbol">⭐</div>
+                    <div class="symbol">💎</div>
+                    <div class="symbol">7️⃣</div>
+                </div>
+            </div>
+            <div class="slot-result" id="slotResult"></div>
+        </div>
+
+        <!-- Coin Pusher Canvas -->
+        <canvas id="gameCanvas"></canvas>
+        
+        <!-- Control Panel -->
+        <div id="control-panel">
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label">得分</span>
+                    <span class="stat-value" id="score">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">銀仔</span>
+                    <span class="stat-value">∞</span>
+                </div>
+            </div>
+            <button id="coinButton" class="coin-button">
+                <span class="button-text">投幣</span>
+                <span class="button-icon">🪙</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Win Notification -->
+    <div id="winNotification" class="win-notification">
+        <div class="win-content">
+            <h2 id="winTitle"></h2>
+            <p id="winMessage"></p>
+        </div>
+    </div>
+
+    <!-- Audio -->
+    <audio id="bgMusic" loop>
+        <source src="audio/bgm.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="coinSound">
+        <source src="audio/coin.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="winSound">
+        <source src="audio/win.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="game.js"></script>
+    <script src="sw-register.js"></script>
+</body>
+</html>
