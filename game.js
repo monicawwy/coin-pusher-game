@@ -1,5 +1,3 @@
-import * as THREE from 'three';
-
 // Game Configuration
 const config = {
     symbols: ['🍒', '🍋', '🍊', '🍉', '⭐', '💎', '7️⃣'],
@@ -25,7 +23,7 @@ const config = {
 
 // Game State
 let scene, camera, renderer;
-let world, cannonDebugRenderer;
+let world;
 let pusherTop, pusherBottom;
 let coins = [];
 let score = 0;
@@ -45,6 +43,16 @@ const loadingScreen = document.getElementById('loadingScreen');
 // Initialize Game
 async function initGame() {
     try {
+        // Check if Three.js and Cannon are loaded
+        if (typeof THREE === 'undefined') {
+            throw new Error('Three.js failed to load');
+        }
+        if (typeof CANNON === 'undefined') {
+            throw new Error('Cannon-es failed to load');
+        }
+        
+        console.log('Libraries loaded successfully');
+        
         // Initialize Three.js
         initThree();
         
@@ -68,9 +76,14 @@ async function initGame() {
         coinButton.addEventListener('click', handleCoinDrop);
         window.addEventListener('resize', handleResize);
         
+        console.log('Game initialized successfully');
+        
     } catch (error) {
         console.error('Game initialization failed:', error);
-        alert('遊戲載入失敗，請重新整理頁面');
+        loadingScreen.querySelector('p').textContent = '遊戲載入失敗: ' + error.message;
+        setTimeout(() => {
+            alert('遊戲載入失敗：' + error.message + '\n\n請重新整理頁面或使用較新的瀏覽器。');
+        }, 100);
     }
 }
 
@@ -122,6 +135,8 @@ function initThree() {
     const light2 = new THREE.PointLight(0x00ffff, 1, 20);
     light2.position.set(3, 3, 5);
     scene.add(light2);
+    
+    console.log('Three.js initialized');
 }
 
 function initPhysics() {
@@ -131,6 +146,9 @@ function initPhysics() {
     world.allowSleep = true;
     world.defaultContactMaterial.friction = 0.4;
     world.defaultContactMaterial.restitution = 0.3;
+    world.solver.iterations = 10;
+    
+    console.log('Cannon.js physics initialized');
 }
 
 function createMachine() {
@@ -548,8 +566,13 @@ function animate() {
     renderer.render(scene, camera);
 }
 
-// Start game when page loads
-window.addEventListener('load', initGame);
+// Start game when libraries are loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGame);
+} else {
+    // DOMContentLoaded already fired
+    initGame();
+}
 
 // Prevent zoom on mobile
 document.addEventListener('gesturestart', (e) => e.preventDefault());
