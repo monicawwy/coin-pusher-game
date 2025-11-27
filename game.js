@@ -40,9 +40,9 @@ function initGame() {
             throw new Error('Matter.js failed to load');
         }
         
-        console.log('Matter.js loaded successfully');
+        console.log('✅ Matter.js loaded successfully');
         
-        // Setup Matter.js
+        // Setup Matter.js with 3D-like perspective
         engine = Engine.create();
         world = engine.world;
         world.gravity.y = 2;
@@ -57,7 +57,9 @@ function initGame() {
                 width: canvasWidth,
                 height: canvasHeight,
                 wireframes: false,
-                background: 'transparent'
+                background: 'transparent',
+                // Enable smooth rendering
+                pixelRatio: window.devicePixelRatio || 1
             }
         });
 
@@ -79,10 +81,11 @@ function initGame() {
         coinButton.addEventListener('click', dropCoin);
         window.addEventListener('resize', handleResize);
         
-        console.log('Game initialized successfully!');
+        console.log('✅ Game initialized successfully!');
+        console.log('🎮 Click the "投幣" button to start!');
         
     } catch (error) {
-        console.error('Game initialization failed:', error);
+        console.error('❌ Game initialization failed:', error);
         alert('遊戲載入失敗：' + error.message + '\n\n請重新整理頁面。');
     }
 }
@@ -91,7 +94,7 @@ function createPushers() {
     const canvasWidth = canvas.offsetWidth;
     const canvasHeight = canvas.offsetHeight;
     
-    // Top pusher (narrower, purple)
+    // Top pusher (narrower, purple) - positioned at back
     const topPusherY = canvasHeight * 0.25;
     const topPusherWidth = canvasWidth * 0.7;
     pusherTop = Bodies.rectangle(
@@ -102,7 +105,9 @@ function createPushers() {
         {
             isStatic: true,
             render: {
-                fillStyle: '#9d4edd'
+                fillStyle: '#9d4edd',
+                strokeStyle: '#7209b7',
+                lineWidth: 3
             }
         }
     );
@@ -119,7 +124,9 @@ function createPushers() {
         {
             isStatic: true,
             render: {
-                fillStyle: '#7209b7'
+                fillStyle: '#7209b7',
+                strokeStyle: '#560bad',
+                lineWidth: 3
             }
         }
     );
@@ -133,7 +140,7 @@ function createWalls() {
     const canvasHeight = canvas.offsetHeight;
     const wallThickness = 10;
 
-    // Side walls
+    // Side walls (orange/red)
     const leftWall = Bodies.rectangle(
         wallThickness / 2,
         canvasHeight / 2,
@@ -141,7 +148,11 @@ function createWalls() {
         canvasHeight,
         {
             isStatic: true,
-            render: { fillStyle: '#ff6b00' }
+            render: { 
+                fillStyle: '#ff6b00',
+                strokeStyle: '#ff4500',
+                lineWidth: 2
+            }
         }
     );
 
@@ -152,11 +163,15 @@ function createWalls() {
         canvasHeight,
         {
             isStatic: true,
-            render: { fillStyle: '#ff6b00' }
+            render: { 
+                fillStyle: '#ff6b00',
+                strokeStyle: '#ff4500',
+                lineWidth: 2
+            }
         }
     );
 
-    // Top pusher barriers
+    // Top pusher barriers (golden)
     const topLeftBarrier = Bodies.rectangle(
         canvasWidth * 0.15 - 15,
         canvasHeight * 0.25,
@@ -164,7 +179,11 @@ function createWalls() {
         100,
         {
             isStatic: true,
-            render: { fillStyle: '#ffd700' }
+            render: { 
+                fillStyle: '#ffd700',
+                strokeStyle: '#ffb700',
+                lineWidth: 2
+            }
         }
     );
 
@@ -175,7 +194,11 @@ function createWalls() {
         100,
         {
             isStatic: true,
-            render: { fillStyle: '#ffd700' }
+            render: { 
+                fillStyle: '#ffd700',
+                strokeStyle: '#ffb700',
+                lineWidth: 2
+            }
         }
     );
 
@@ -187,7 +210,11 @@ function createWalls() {
         10,
         {
             isStatic: true,
-            render: { fillStyle: '#ff0080' }
+            render: { 
+                fillStyle: '#ff0080',
+                strokeStyle: '#d4006d',
+                lineWidth: 2
+            }
         }
     );
 
@@ -198,7 +225,7 @@ function fillInitialCoins() {
     const canvasWidth = canvas.offsetWidth;
     const canvasHeight = canvas.offsetHeight;
     
-    // Fill top pusher area
+    // Fill top pusher area (at the back)
     for (let i = 0; i < 30; i++) {
         const x = canvasWidth * 0.15 + Math.random() * (canvasWidth * 0.7);
         const y = canvasHeight * 0.15 + Math.random() * 60;
@@ -249,7 +276,7 @@ function updatePushers() {
 
     // Update bottom pusher
     pusherBottom.movement.distance += pusherBottom.movement.speed * pusherBottom.movement.direction;
-    if (Math.abs(pusherBottom.movement.distance) >= pusherBottom.movement.maxDistance) {
+    if (Math.abs(pusherBottom.movement.distance) >= pusherBottom.maxDistance) {
         pusherBottom.movement.direction *= -1;
     }
     Body.setPosition(pusherBottom, {
@@ -284,10 +311,10 @@ function dropCoin() {
     const canvasWidth = canvas.offsetWidth;
     const canvasHeight = canvas.offsetHeight;
     
-    // Drop coin from top pusher back position with random left/right offset
+    // Drop coin from TOP PUSHER BACK POSITION with random left/right offset
     const randomOffset = (Math.random() - 0.5) * 80;
     const x = canvasWidth / 2 + randomOffset;
-    const y = canvasHeight * 0.15;
+    const y = canvasHeight * 0.10; // Drop from very top (back of top pusher)
     
     createCoin(x, y, '#ffed4e');
     
@@ -296,6 +323,8 @@ function dropCoin() {
     setTimeout(() => {
         coinButton.style.transform = 'scale(1)';
     }, 100);
+    
+    console.log('🪙 Coin dropped! Spinning slot machine...');
     
     // Spin slot machine
     spinSlotMachine();
@@ -354,10 +383,13 @@ function checkWin(results) {
         
         slotResult.textContent = `🎉 WIN! ${symbol}${symbol}${symbol}`;
         
+        console.log(`🎰 WIN! ${symbol} x3 = ${reward} coins!`);
+        
         showWinNotification(symbol, reward);
         dropRewardCoins(reward);
     } else {
         slotResult.textContent = `${results[0]} ${results[1]} ${results[2]} - Try Again!`;
+        console.log('No win this time. Try again!');
     }
     
     isSpinning = false;
@@ -367,10 +399,12 @@ function dropRewardCoins(amount) {
     const canvasWidth = canvas.offsetWidth;
     const canvasHeight = canvas.offsetHeight;
     
+    console.log(`💰 Dropping ${amount} reward coins!`);
+    
     for (let i = 0; i < amount; i++) {
         setTimeout(() => {
             const x = canvasWidth * 0.3 + Math.random() * (canvasWidth * 0.4);
-            const y = canvasHeight * 0.05;
+            const y = canvasHeight * 0.05; // Drop from top
             createCoin(x, y, '#ffed4e');
         }, i * 20);
     }

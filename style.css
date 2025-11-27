@@ -23,47 +23,6 @@ body {
     position: relative;
 }
 
-/* Loading Screen */
-#loadingScreen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #2c003e 0%, #5b0a91 100%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    transition: opacity 0.5s;
-}
-
-#loadingScreen.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.loader {
-    border: 8px solid rgba(255, 215, 0, 0.2);
-    border-top: 8px solid #ffd700;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-#loadingScreen p {
-    color: #ffd700;
-    margin-top: 20px;
-    font-size: 18px;
-}
-
 /* Slot Machine Styles */
 #slot-machine {
     background: linear-gradient(180deg, #8b0000 0%, #ff4500 30%, #ffa500 100%);
@@ -173,22 +132,18 @@ body {
                  0 0 20px rgba(255, 215, 0, 0.5);
 }
 
-/* 3D Canvas Container */
-#canvas-container {
+/* Canvas Styles - 3D PERSPECTIVE VIEW */
+#gameCanvas {
     flex: 1;
     width: 100%;
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(180deg, #1a1a2e 0%, #2a1a3e 100%);
-}
-
-#gameCanvas {
-    width: 100%;
-    height: 100%;
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
     display: block;
+    /* Add perspective effect */
+    transform-style: preserve-3d;
+    perspective: 1000px;
 }
 
-/* Control Panel */
+/* Control Panel - MAKE BUTTON VISIBLE */
 #control-panel {
     background: linear-gradient(180deg, #8b0000 0%, #ff4500 100%);
     padding: 15px;
@@ -198,6 +153,8 @@ body {
     border-top: 6px solid #ffd700;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.6),
                 inset 0 3px 10px rgba(0, 0, 0, 0.3);
+    z-index: 100; /* ENSURE IT'S ON TOP */
+    position: relative;
 }
 
 .stats {
@@ -227,7 +184,7 @@ body {
                  0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
-/* Coin Button */
+/* COIN BUTTON - HIGHLY VISIBLE */
 .coin-button {
     background: radial-gradient(circle at 30% 30%, #ffed4e, #ffd700, #ffb700);
     border: 5px solid #ff6b00;
@@ -244,6 +201,7 @@ body {
     transition: all 0.15s;
     position: relative;
     overflow: hidden;
+    z-index: 101; /* MAKE SURE IT'S CLICKABLE */
 }
 
 .coin-button::before {
